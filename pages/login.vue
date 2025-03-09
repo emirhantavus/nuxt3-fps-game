@@ -23,28 +23,30 @@
           <p class="text-center text-sm mt-4">
             Hesabın yok mu? <NuxtLink to="/register" class="text-valorantRed">Kayıt Ol</NuxtLink>
           </p>
+          <p class="text-center text-sm mt-4">
+            <NuxtLink to="/reset-password" class="text-valorantRed">Şifremi Unuttum</NuxtLink>
+          </p>
         </div>
       </div>
 </template>
     
-    <script setup lang="ts">
-    import { ref } from "vue";
-    import { useRouter } from "vue-router";
-    import { loginUser } from "@/composables/auth";
-    
-    const email = ref("");
-    const password = ref("");
-    const errorMessage = ref<string | null>(null);
-    const router = useRouter();
-    
-    const handleLogin = async () => {
-      try {
-        await loginUser(email.value, password.value);
-        alert("Giriş başarılı! Anasayfaya yönlendiriliyorsunuz...");
-        router.push("/");
-      } catch (error) {
-        errorMessage.value = "Giriş sırasında hata oluştu. Bilgilerinizi kontrol edin.";
-      }
-    };
-    </script>
-    
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { loginUser } from "@/composables/auth";
+
+const email = ref("");
+const password = ref("");
+const errorMessage = ref<string | null>(null);
+const router = useRouter();
+
+const handleLogin = async () => {
+  try {
+    await loginUser(email.value, password.value);
+    alert("Giriş başarılı! Anasayfaya yönlendiriliyorsunuz...");
+    router.push("/");
+  } catch (error) {
+    errorMessage.value = "Giriş sırasında hata oluştu. Bilgilerinizi kontrol edin.";
+  }
+};
+</script>
