@@ -1,14 +1,19 @@
 <template>
-  <div class="relative w-full h-screen overflow-hidden">
-    <!-- Arkaplan video kısmı. sonra değiştircez. -->
-    <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted>
-      <source src="/video1.mp4" type="video/mp4" />
-    </video>
+  <div class="relative w-full h-screen">
+    <!-- Navbar (Sabit Üstte) -->
+    <Navbar class="fixed top-0 left-0 w-full z-50" />
 
+    <!-- Arkaplan Video -->
+    <div class="absolute top-0 left-0 w-full h-full">
+      <video class="w-full h-full object-cover transform translate-y-16" autoplay loop muted>
+        <source src="/video1.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- Karanlık Filtre -->
     <div class="absolute top-0 left-0 w-full h-full bg-black opacity-60"></div>
 
-    <Navbar />
-
+    <!-- İçerik (Navbar Yüksekliği Kadar Aşağı Alındı) -->
     <div class="relative flex flex-col items-center justify-center h-full text-center px-6 z-10">
       <h1 class="text-6xl font-extrabold text-white drop-shadow-lg">
         Gerçek Dünyada <span class="text-valorantRed">FPS Deneyimi</span>
