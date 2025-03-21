@@ -24,23 +24,23 @@
     </div>
 
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 p-6">
-      <div
+      <NuxtLink
         v-for="product in filteredProducts"
         :key="product.id"
-        class="bg-gray-800 p-4 rounded-lg shadow-lg hover:scale-105 transition-transform cursor-pointer"
+        :to="`/product/${product.id}`"
+        class="bg-gray-800 p-4 rounded-lg shadow-lg hover:scale-105 transition-transform cursor-pointer block"
       >
         <img :src="product.image" alt="Ürün Resmi" class="w-full h-40 object-cover rounded-lg" />
         <h2 class="text-xl font-bold mt-4">{{ product.name }}</h2>
-        <p class="text-gray-400">{{ product.description }}</p>
         <p class="text-lg font-bold text-valorantRed mt-2">{{ product.price }} ₺</p>
-      </div>
+      </NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Navbar from "@/components/navbar.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useProductStore } from "@/stores/products";
 import { useProducts } from "@/composables/useProducts";
 
@@ -49,6 +49,10 @@ const selectedCategory = ref("Tümü");
 
 const store = useProductStore();
 const { fetchProducts } = useProducts();
+
+onMounted(() => {
+  store.fetchProducts();
+});
 
 const filteredProducts = computed(() => store.getByCategory(selectedCategory.value));
 </script>
