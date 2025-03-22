@@ -6,6 +6,7 @@ import {
 import { ref } from "vue";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 
 const currentUser = ref<User | null>(null);
 
@@ -16,6 +17,9 @@ onAuthStateChanged(auth, (user) => {
 export const registerUser = async (email: string, password: string) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "wallets", userCredential.user.uid), {
+      balance: 0,
+    });
     return userCredential.user;
   } catch (error) {
     console.error("Kayıt sırasında hata oluştu:", error);

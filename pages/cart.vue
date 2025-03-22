@@ -25,9 +25,15 @@
 
       <div v-else class="text-gray-400">Sepetiniz boş.</div>
 
-      <div v-if="cart.items.length" class="mt-10 text-right">
-        <p class="text-xl font-bold">Toplam: <span class="text-valorantRed">{{ cart.totalPrice }} ₺</span></p>
-        <button @click="cart.clearCart()" class="mt-4 bg-red-600 px-6 py-2 rounded font-bold hover:opacity-80">
+      <div v-if="cart.items.length" class="mt-10 text-right space-y-4">
+        <p class="text-xl font-bold">
+          Toplam: <span class="text-valorantRed">{{ cart.totalPrice }} ₺</span>
+        </p>
+        <p class="text-lg">Mevcut Bakiye: <span class="text-green-400">{{ balance }} ₺</span></p>
+        <button @click="handlePurchase" class="bg-valorantRed px-6 py-2 rounded font-bold hover:opacity-80">
+          Satın Al
+        </button>
+        <button @click="cart.clearCart()" class="ml-4 bg-red-600 px-6 py-2 rounded font-bold hover:opacity-80">
           Sepeti Temizle
         </button>
       </div>
@@ -38,11 +44,35 @@
 <script setup lang="ts">
 import Navbar from "@/components/navbar.vue";
 import { useCartStore } from "@/stores/cart";
-import { onMounted } from 'vue';
+import { useWallet } from "@/composables/useWallet";
+import { useInventory } from "@/composables/useInventory";
+import { onMounted } from "vue";
 
 const cart = useCartStore();
+const { balance, deduct } = useWallet();
+const { addItemToInventory } = useInventory();
 
 onMounted(() => {
   cart.loadCart();
 });
+
+const handlePurchase = async () => {
+  const total = cart.totalPrice;
+
+  if (total > balance.value) {
+    alert("Yetersiz bakiye!");
+    return;
+  }
+
+  const success = await deduct(total);
+  if (success) {
+    for (const item of cart.items) {
+      await addItemToInventory(item.id);
+    }
+    cart.clearCart();
+    alert("Satın alma başarılı!");
+  } else {
+    alert("Bilinmeyen bir hata oluştu.");
+  }
+};
 </script>
