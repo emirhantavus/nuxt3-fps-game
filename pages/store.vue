@@ -2,11 +2,13 @@
   <div class="w-full min-h-screen bg-valorantDark text-white">
     <Navbar class="fixed top-0 left-0 w-full z-50" />
 
+    <!-- Başlık -->
     <div class="container mx-auto pt-24 text-center">
       <h1 class="text-4xl font-bold text-valorantRed">Mağaza</h1>
       <p class="text-lg text-gray-300">Oyun içi aksesuarları ve ekipmanları satın al!</p>
     </div>
 
+    <!-- Kategoriler -->
     <div class="container mx-auto mt-8">
       <div class="flex space-x-4 justify-center">
         <button
@@ -23,6 +25,7 @@
       </div>
     </div>
 
+    <!-- Ürün Listesi -->
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 p-6">
       <NuxtLink
         v-for="product in filteredProducts"
@@ -42,14 +45,11 @@
 import Navbar from "@/components/navbar.vue";
 import { ref, computed, onMounted } from "vue";
 import { useProductStore } from "@/stores/products";
-import { useProducts } from "@/composables/useProducts";
 
 const categories = ref(["Tümü", "Silahlar", "Aksesuarlar", "Zırhlar", "Ekipman"]);
 const selectedCategory = ref("Tümü");
 
 const store = useProductStore();
-const { fetchProducts } = useProducts();
-
 onMounted(() => {
   store.fetchProducts();
 });
