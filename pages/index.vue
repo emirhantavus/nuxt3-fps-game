@@ -64,8 +64,8 @@ interface Haber {
 }
 
 const haberler = ref<Haber[]>([
-  { id: 1, title: "Yeni Güncelleme Yayında!", desc: "FPS Oyununa yeni harita ve silahlar eklendi.", image: "/news1.jpg" },
-  { id: 2, title: "Turnuva Başlıyor!", desc: "Büyük FPS turnuvası başlıyor, kayıtları kaçırma!", image: "/news2.jpg" },
-  { id: 3, title: "Dereceli Mod Güncellendi!", desc: "Dereceli sistemde denge değişiklikleri yapıldı.", image: "/news3.jpg" }
+  { id: 1, title: "Yeni Güncelleme Yayında!", desc: "FPS Oyununa yeni harita ve silahlar eklendi.", image: "/foto1.png" },
+  { id: 2, title: "Turnuva Başlıyor!", desc: "Büyük FPS turnuvası başlıyor, kayıtları kaçırma!", image: "/foto1.png" },
+  { id: 3, title: "Dereceli Mod Güncellendi!", desc: "Dereceli sistemde denge değişiklikleri yapıldı.", image: "/foto1.png" }
 ]);
 </script>

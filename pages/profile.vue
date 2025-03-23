@@ -43,6 +43,8 @@ import { useAuth, uploadAvatar } from "@/composables/auth";
 import { useRouter } from "vue-router";
 import { watchEffect, ref, reactive } from "vue";
 import Navbar from "@/components/navbar.vue";
+import { useAuthRedirect } from "@/composables/useAuthRedirect";
+useAuthRedirect();
 
 const { currentUser } = useAuth();
 const router = useRouter();

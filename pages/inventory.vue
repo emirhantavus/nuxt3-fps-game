@@ -22,6 +22,8 @@
 import Navbar from "@/components/navbar.vue";
 import { useInventory } from "@/composables/useInventory";
 import { onMounted } from "vue";
+import { useAuthRedirect } from "@/composables/useAuthRedirect";
+useAuthRedirect();
 
 const { inventory, loadInventory } = useInventory();
 

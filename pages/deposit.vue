@@ -28,6 +28,8 @@
     import { ref } from "vue";
     import { useWallet } from "@/composables/useWallet";
     import Navbar from "@/components/navbar.vue";
+    import { useAuthRedirect } from "@/composables/useAuthRedirect";
+    useAuthRedirect();
     
     const amount = ref(0);
     const message = ref("");
