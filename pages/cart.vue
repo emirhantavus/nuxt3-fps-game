@@ -64,18 +64,25 @@ const handlePurchase = async () => {
     return;
   }
 
-  const success = await deduct(total);
-  if (success) {
-    for (const item of cart.items) {
-      for (let i = 0; i < item.quantity; i++) {
-        console.log("🧪 Envantere ekleniyor:", item.id);
-        await addItemToInventory(item.id);
-      }
+  let canBuyAll = true;
+  for (const item of cart.items) {
+    const success = await addItemToInventory(item.id);
+    if (!success) {
+      alert(`❌ ${item.name} zaten envanterde!`);
+      canBuyAll = false;
     }
+  }
+
+  if (!canBuyAll) {
+    return;
+  }
+
+  const deducted = await deduct(total);
+  if (deducted) {
     cart.clearCart();
-    alert("Satın alma başarılı! Ürünler envantere eklendi.");
+    alert("✅ Satın alma başarılı! Ürünler envantere eklendi.");
   } else {
-    alert("Bilinmeyen bir hata oluştu.");
+    alert("⚠️ Bakiyeden düşme başarısız.");
   }
 };
 </script>
