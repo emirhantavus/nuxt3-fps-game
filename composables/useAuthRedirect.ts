@@ -7,8 +7,10 @@ export const useAuthRedirect = () => {
   const router = useRouter();
 
   watchEffect(() => {
-    if (currentUser.value === null) {
-      router.push("/login");
+    if (process.client) {
+      if (currentUser.value === null) {
+        router.push("/login");
+      }
     }
   });
 };

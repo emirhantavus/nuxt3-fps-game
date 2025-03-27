@@ -67,7 +67,7 @@ const handlePurchase = async () => {
   const success = await deduct(total);
   if (success) {
     for (const item of cart.items) {
-      await addItemToInventory(item.id);
+      await addItemToInventory(item.id); // productId olarak gönderiyoruz
     }
     cart.clearCart();
     alert("Satın alma başarılı!");

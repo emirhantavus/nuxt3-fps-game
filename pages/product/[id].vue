@@ -11,12 +11,9 @@
 
         <!-- Detay Kartı -->
         <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-xl border border-valorantRed">
-          <h1 class="text-4xl font-extrabold text-valorantRed mb-4">{{ product?.name }}</h1>
-          <p class="text-gray-300 mb-6 leading-relaxed whitespace-pre-wrap break-words max-h-[240px] overflow-y-auto">
-            {{ product?.description }}
-          </p>
+          <h1 class="text-4xl font-extrabold text-valorantRed mb-4">{{ product?.item.name }}</h1>
 
-          <div class="flex items-center space-x-4 mb-6">
+          <div class="flex items-center justify-between mb-6">
             <p class="text-3xl font-bold text-white">{{ product?.price }} ₺</p>
             <button
               @click="handleAddToCart"
@@ -32,7 +29,6 @@
         </div>
       </div>
 
-      <!-- Benzer Ürünler -->
       <div v-if="similarProducts.length" class="mt-16">
         <h2 class="text-2xl font-bold text-white mb-4">Benzer Ürünler</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -43,8 +39,10 @@
             class="bg-gray-800 p-4 rounded-lg shadow hover:scale-105 transition block"
           >
             <img :src="item.image" alt="" class="w-full h-32 object-cover rounded mb-2" />
-            <h3 class="text-lg font-bold text-white">{{ item.name }}</h3>
-            <p class="text-valorantRed font-bold">{{ item.price }} ₺</p>
+            <div class="flex justify-between items-center">
+              <h3 class="text-base font-bold text-white">{{ item.item.name }}</h3>
+              <p class="text-sm font-bold text-valorantRed">{{ item.price }} ₺</p>
+            </div>
           </NuxtLink>
         </div>
       </div>
@@ -85,7 +83,7 @@ const handleAddToCart = () => {
 
   cartStore.addToCart({
     id: product.value.id,
-    name: product.value.name,
+    name: product.value.item.name,
     price: product.value.price,
     image: product.value.image,
     quantity: 1,

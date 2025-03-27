@@ -2,13 +2,11 @@
   <div class="w-full min-h-screen bg-valorantDark text-white">
     <Navbar class="fixed top-0 left-0 w-full z-50" />
 
-    <!-- Başlık -->
     <div class="container mx-auto pt-24 text-center">
       <h1 class="text-4xl font-bold text-valorantRed">Mağaza</h1>
       <p class="text-lg text-gray-300">Oyun içi aksesuarları ve ekipmanları satın al!</p>
     </div>
 
-    <!-- Kategoriler -->
     <div class="container mx-auto mt-8">
       <div class="flex space-x-4 justify-center">
         <button
@@ -25,7 +23,7 @@
       </div>
     </div>
 
-    <!-- Ürün Listesi -->
+    <!-- Ürün Kartları -->
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 p-6">
       <NuxtLink
         v-for="product in filteredProducts"
@@ -34,8 +32,16 @@
         class="bg-gray-800 p-4 rounded-lg shadow-lg hover:scale-105 transition-transform cursor-pointer block"
       >
         <img :src="product.image" alt="Ürün Resmi" class="w-full h-40 object-cover rounded-lg" />
-        <h2 class="text-xl font-bold mt-4">{{ product.name }}</h2>
-        <p class="text-lg font-bold text-valorantRed mt-2">{{ product.price }} ₺</p>
+
+        <!-- İsim + Fiyat -->
+        <div class="flex justify-between items-center mt-4">
+          <h2 class="text-lg font-bold">{{ product.item.name }}</h2>
+          <p class="text-lg font-bold text-valorantRed">{{ product.price }} ₺</p>
+        </div>
+
+        <p class="text-sm mt-1 text-gray-400">Tür: {{ product.item.type }}</p>
+        <p class="text-sm text-gray-400">Hasar: {{ product.item.damage }}</p>
+        <p class="text-sm text-gray-400">Mermi: {{ product.item.ammo }}</p>
       </NuxtLink>
     </div>
   </div>
