@@ -1,5 +1,13 @@
+// composables/useInventory.ts
 import { db } from "@/composables/firebase";
-import { collection, getDocs, doc, getDoc, addDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { ref } from "vue";
 import { useAuth } from "@/composables/auth";
 
@@ -11,7 +19,10 @@ export const useInventory = () => {
   const loadInventory = async () => {
     if (!currentUser.value) return;
 
-    const inventoryRef = collection(db, `inventory/${currentUser.value.uid}/items`);
+    const inventoryRef = collection(
+      db,
+      `inventory/${currentUser.value.uid}/items`
+    );
     const snapshot = await getDocs(inventoryRef);
 
     const items = snapshot.docs.map((docSnap) => ({
@@ -25,30 +36,37 @@ export const useInventory = () => {
   const addItemToInventory = async (productId: string) => {
     if (!currentUser.value) return;
 
+    // 1. Ürünü çek
     const productRef = doc(db, "products", productId);
     const productSnap = await getDoc(productRef);
 
     if (!productSnap.exists()) {
-      console.error("Ürün bulunamadı.");
+      console.error("❌ Ürün bulunamadı.");
       return;
     }
 
     const productData = productSnap.data();
+
+    // 2. item verisini çek (productData.itemId ile)
     const itemRef = doc(db, "items", productData.itemId);
     const itemSnap = await getDoc(itemRef);
 
     if (!itemSnap.exists()) {
-      console.error("Item bilgisi bulunamadı.");
+      console.error("❌ Item bilgisi bulunamadı.");
       return;
     }
 
     const itemData = itemSnap.data();
 
-    await addDoc(collection(db, `inventory/${currentUser.value.uid}/items`), {
-      productId,
-      addedAt: Timestamp.now(),
-      ...itemData,
-    });
+    // 3. envantere ekle
+    await addDoc(
+      collection(db, `inventory/${currentUser.value.uid}/items`),
+      {
+        productId,
+        addedAt: Timestamp.now(),
+        ...itemData,
+      }
+    );
   };
 
   return {

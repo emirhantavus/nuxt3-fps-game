@@ -14,7 +14,7 @@
         <h1 class="text-3xl font-bold mb-6">Profil Bilgileri</h1>
         
         <div class="relative inline-block">
-          <img :src="userProfile.photoURL || '/default-avatar.png'" alt="Avatar" class="w-24 h-24 rounded-full mx-auto border-4 border-white mb-4"/>
+          <img :src="userProfile.photoURL || '/avatar.png'" alt="Avatar" class="w-24 h-24 rounded-full mx-auto border-4 border-white mb-4"/>
           <input type="file" @change="handleAvatarSelect" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"/>
         </div>
 
@@ -52,7 +52,7 @@ const message = ref<string | null>(null);
 const errorMessage = ref<string | null>(null);
 
 const userProfile = reactive({
-  photoURL: currentUser.value?.photoURL || "/default-avatar.png",
+  photoURL: currentUser.value?.photoURL || "/avatar.png",
   selectedFile: null as File | null
 });
 
@@ -60,7 +60,7 @@ watchEffect(() => {
   if (!currentUser.value) {
     router.push("/login");
   } else {
-    userProfile.photoURL = currentUser.value.photoURL || "/default-avatar.png";
+    userProfile.photoURL = currentUser.value.photoURL || "/avatar.png";
   }
 });
 

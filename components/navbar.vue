@@ -32,7 +32,7 @@
         </NuxtLink>
 
         <NuxtLink v-if="currentUser" to="/profile">
-          <img :src="currentUser.photoURL || '/default-avatar.png'" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-white" />
+          <img :src="currentUser.photoURL || '/avatar.png'" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-white" />
         </NuxtLink>
 
         <button v-if="currentUser" @click="handleLogout" class="bg-red-600 px-4 py-2 rounded-lg text-white font-bold hover:opacity-80 transition-all">

@@ -67,10 +67,13 @@ const handlePurchase = async () => {
   const success = await deduct(total);
   if (success) {
     for (const item of cart.items) {
-      await addItemToInventory(item.id); // productId olarak gönderiyoruz
+      for (let i = 0; i < item.quantity; i++) {
+        console.log("🧪 Envantere ekleniyor:", item.id);
+        await addItemToInventory(item.id);
+      }
     }
     cart.clearCart();
-    alert("Satın alma başarılı!");
+    alert("Satın alma başarılı! Ürünler envantere eklendi.");
   } else {
     alert("Bilinmeyen bir hata oluştu.");
   }

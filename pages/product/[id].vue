@@ -1,15 +1,14 @@
+<!-- pages/product/[id].vue -->
 <template>
   <div class="w-full min-h-screen bg-valorantDark text-white pb-20">
     <Navbar class="fixed top-0 left-0 w-full z-50" />
 
     <div class="container mx-auto pt-28 px-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <!-- Ürün Görseli -->
         <div class="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700">
           <img :src="product?.image" alt="Ürün Görseli" class="w-full h-72 object-cover rounded-lg" />
         </div>
 
-        <!-- Detay Kartı -->
         <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-xl border border-valorantRed">
           <h1 class="text-4xl font-extrabold text-valorantRed mb-4">{{ product?.item.name }}</h1>
 
