@@ -1,55 +1,62 @@
 import { db } from "@/composables/firebase";
-import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
+import { doc, getDoc, updateDoc, increment } from "firebase/firestore";
+import { ref, watch } from "vue";
 import { useAuth } from "@/composables/auth";
-import { ref, onMounted } from "vue";
 
-const balance = ref<number>(0);
+const balance = ref<number | null>(null);
 
 export const useWallet = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, authLoaded } = useAuth();
 
-  // Kullanıcının cüzdan bilgilerini Firestore'dan al
-  const loadWallet = async () => {
-    if (!currentUser.value) return;
+  const fetchBalance = async () => {
+    if (!authLoaded.value || !currentUser.value) return;
 
     const walletRef = doc(db, "wallets", currentUser.value.uid);
-    const snapshot = await getDoc(walletRef);
+    const snap = await getDoc(walletRef);
 
-    if (snapshot.exists()) {
-      balance.value = snapshot.data().balance;
-    } else {
-      // İlk defa kayıt olan kullanıcı için varsayılan cüzdan oluştur
-      await setDoc(walletRef, { balance: 0 });
-      balance.value = 0;
+    if (snap.exists()) {
+      const data = snap.data();
+      balance.value = data.balance ?? 0;
     }
   };
 
-  // Bakiye yükleme
   const deposit = async (amount: number) => {
-    if (!currentUser.value) return;
+    if (!authLoaded.value || !currentUser.value) return;
 
     const walletRef = doc(db, "wallets", currentUser.value.uid);
-    await updateDoc(walletRef, { balance: increment(amount) });
-    balance.value += amount;
+    await updateDoc(walletRef, {
+      balance: increment(amount),
+    });
+
+    balance.value = (balance.value ?? 0) + amount;
   };
 
-  // Ürün satın alındığında bakiye düşürme
-  const deduct = async (amount: number): Promise<boolean> => {
-    if (!currentUser.value) return false;
-
-    if (balance.value < amount) return false;
+  const deduct = async (amount: number) => {
+    if (!authLoaded.value || !currentUser.value) return false;
 
     const walletRef = doc(db, "wallets", currentUser.value.uid);
-    await updateDoc(walletRef, { balance: increment(-amount) });
-    balance.value -= amount;
-    return true;
+    const snap = await getDoc(walletRef);
+    const currentBalance = snap.exists() ? snap.data().balance : 0;
+
+    if (currentBalance >= amount) {
+      await updateDoc(walletRef, { balance: increment(-amount) });
+      balance.value = (balance.value ?? 0) - amount;
+      return true;
+    }
+
+    return false;
   };
 
-  onMounted(loadWallet);
+  // 🔁 Oturum yüklendikten sonra otomatik bakiye yükle
+  watch([authLoaded, currentUser], ([loaded, user]) => {
+    if (loaded && user) {
+      fetchBalance();
+    }
+  });
 
   return {
     balance,
-    loadWallet,
+    fetchBalance,
     deposit,
     deduct,
   };

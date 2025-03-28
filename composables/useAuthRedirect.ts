@@ -1,16 +1,19 @@
 import { useAuth } from "@/composables/auth";
 import { useRouter } from "vue-router";
-import { watchEffect } from "vue";
+import { watch } from "vue";
 
 export const useAuthRedirect = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, authLoaded } = useAuth();
   const router = useRouter();
 
-  watchEffect(() => {
-    if (process.client) {
-      if (currentUser.value === null) {
+  watch(
+    [authLoaded, currentUser],
+    ([loaded, user]) => {
+      console.log("🔐 Yönlendirme Kontrolü:", { loaded, user });
+      if (process.client && loaded && user === null) {
         router.push("/login");
       }
-    }
-  });
+    },
+    { immediate: true }
+  );
 };

@@ -1,100 +1,66 @@
 import { auth } from "@/composables/firebase";
 import {
-  createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
-  sendPasswordResetEmail, updatePassword, updateProfile
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+  updatePassword,
+  updateProfile,
+  onAuthStateChanged,
+  type User,
 } from "firebase/auth";
 import { ref } from "vue";
-import { onAuthStateChanged, type User } from "firebase/auth";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/composables/firebase";
 
 const currentUser = ref<User | null>(null);
+const authLoaded = ref(false);
 
 onAuthStateChanged(auth, (user) => {
+  console.log("👤 onAuthStateChanged çalıştı:", user?.email || "Anonim");
   currentUser.value = user;
+  authLoaded.value = true;
 });
 
-export const registerUser = async (email: string, password: string) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, "wallets", userCredential.user.uid), {
-      balance: 0,
-    });
-    return userCredential.user;
-  } catch (error) {
-    console.error("Kayıt sırasında hata oluştu:", error);
-    throw error;
-  }
+export const useAuth = () => {
+  return { currentUser, logoutUser, authLoaded };
 };
 
+export const registerUser = async (email: string, password: string) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  await setDoc(doc(db, "wallets", userCredential.user.uid), { balance: 0 });
+  return userCredential.user;
+};
 
 export const loginUser = async (email: string, password: string) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    console.error("Giriş sırasında hata oluştu:", error);
-    throw error;
-  }
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  return userCredential.user;
 };
-
 
 export const logoutUser = async () => {
-  try {
-    await signOut(auth);
-    currentUser.value = null;
-  } catch (error) {
-    console.error("Çıkış sırasında hata oluştu:", error);
-    throw error;
-  }
-};
-
-export const useAuth = () => {
-  return { currentUser, logoutUser };
+  await signOut(auth);
+  currentUser.value = null;
 };
 
 export const resetPassword = async (email: string) => {
-  try {
-    await sendPasswordResetEmail(auth, email);
-    return "Şifre sıfırlama bağlantısı e-posta adresinize iletildi.";
-  } catch (error) {
-    console.error("Şifre sıfırlama sırasında hata oluştu:", error);
-    throw error;
-  }
-  
+  await sendPasswordResetEmail(auth, email);
 };
 
 export const updateUserPassword = async (newPassword: string) => {
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      throw new Error("Giriş yapmış bir kullanıcı bulunamadı.")
-    }
-    await updatePassword(user, newPassword);
-    return "Şifre başarıyla güncellendi.";
-  } catch (error){
-    console.error("Şifre güncelleme sırasında hata oluştu:", error)
-    throw error;
-  }
-}
+  const user = auth.currentUser;
+  if (!user) throw new Error("Giriş yapılmamış.");
+  await updatePassword(user, newPassword);
+};
 
 export const uploadAvatar = async (file: File) => {
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error("Giriş yapmış bir kullanıcı bulunamadı.");
+  const user = auth.currentUser;
+  if (!user) throw new Error("Giriş yapılmamış.");
 
-    const storage = getStorage();
-    const fileRef = storageRef(storage, `avatars/${user.uid}`);
-    
-    await uploadBytes(fileRef, file);
-    
-    const photoURL = await getDownloadURL(fileRef);
-    
-    await updateProfile(user, { photoURL });
-
-    return photoURL;
-  } catch (error) {
-    console.error("Avatar yükleme sırasında hata oluştu:", error);
-    throw error;
-  }
+  const storage = getStorage();
+  const fileRef = storageRef(storage, `avatars/${user.uid}`);
+  await uploadBytes(fileRef, file);
+  const photoURL = await getDownloadURL(fileRef);
+  await updateProfile(user, { photoURL });
+  return photoURL;
 };

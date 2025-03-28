@@ -23,14 +23,24 @@
 <script setup lang="ts">
 import Navbar from "@/components/navbar.vue";
 import { useInventory } from "@/composables/useInventory";
-import { onMounted } from "vue";
 import { useAuthRedirect } from "@/composables/useAuthRedirect";
+import { useAuth } from "@/composables/auth";
+import { watch } from "vue";
 
 useAuthRedirect();
 
-const { inventory, loadInventory } = useInventory();
+const { inventory, fetchInventory } = useInventory();
+const { authLoaded, currentUser } = useAuth();
 
-onMounted(() => {
-  loadInventory();
-});
+// 🔁 F5 ATMADAN bile envanteri yüklüyoruz
+watch(
+  [authLoaded, currentUser],
+  ([loaded, user]) => {
+    if (loaded && user) {
+      console.log("🔁 Kullanıcı oturumu yüklendi, envanter çağrılıyor...");
+      fetchInventory();
+    }
+  },
+  { immediate: true }
+);
 </script>

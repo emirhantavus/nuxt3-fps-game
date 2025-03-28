@@ -5,9 +5,11 @@
     <div class="max-w-md mx-auto mt-20 bg-gray-800 p-6 rounded-lg shadow-lg">
       <h1 class="text-2xl font-bold mb-4">Bakiye Yükle</h1>
 
-      <!-- ✅ Mevcut Bakiye -->
+      <!-- 🟢 Mevcut Bakiye -->
       <p class="text-lg mb-4">
-        Mevcut Bakiye: <span class="text-green-400 font-bold">{{ balance }} ₺</span>
+        Mevcut Bakiye:
+        <span v-if="balance !== null" class="text-green-400 font-bold">{{ balance }} ₺</span>
+        <span v-else class="text-yellow-400 font-bold">Yükleniyor...</span>
       </p>
 
       <input
@@ -38,7 +40,7 @@ useAuthRedirect();
 
 const amount = ref(0);
 const message = ref("");
-const { deposit, balance } = useWallet(); // ✅ balance eklendi
+const { deposit, balance } = useWallet();
 
 const handleDeposit = async () => {
   if (amount.value <= 0) return;

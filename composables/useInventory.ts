@@ -1,13 +1,7 @@
+// composables/useInventory.ts
 import { db } from "@/composables/firebase";
 import {
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  addDoc,
-  Timestamp,
-  query,
-  where,
+  collection, getDocs, doc, getDoc, addDoc, Timestamp, query, where,
 } from "firebase/firestore";
 import { ref } from "vue";
 import { useAuth } from "@/composables/auth";
@@ -15,10 +9,15 @@ import { useAuth } from "@/composables/auth";
 const inventory = ref<any[]>([]);
 
 export const useInventory = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, authLoaded } = useAuth();
 
-  const loadInventory = async () => {
-    if (!currentUser.value) return;
+  const fetchInventory = async () => {
+    if (!authLoaded.value || !currentUser.value) {
+      console.warn("⏳ Auth hazır değil veya kullanıcı yok.");
+      return;
+    }
+
+    console.log("📦 Envanter yükleniyor...");
 
     const inventoryRef = collection(db, `inventory/${currentUser.value.uid}/items`);
     const snapshot = await getDocs(inventoryRef);
@@ -45,36 +44,29 @@ export const useInventory = () => {
     }
 
     inventory.value = items;
+    console.log("✅ Envanter yüklendi:", items);
   };
 
   const addItemToInventory = async (productId: string) => {
-    if (!currentUser.value) return false;
+    if (!authLoaded.value || !currentUser.value) return false;
 
     const inventoryRef = collection(db, `inventory/${currentUser.value.uid}/items`);
     const existingQuery = query(inventoryRef, where("productId", "==", productId));
     const existingSnapshot = await getDocs(existingQuery);
 
     if (!existingSnapshot.empty) {
-      console.warn("Bu ürün zaten envanterde var.");
+      console.warn("⚠️ Bu ürün zaten envanterde var.");
       return false;
     }
 
     const productRef = doc(db, "products", productId);
     const productSnap = await getDoc(productRef);
-
-    if (!productSnap.exists()) {
-      console.error("Ürün bulunamadı.");
-      return false;
-    }
+    if (!productSnap.exists()) return false;
 
     const productData = productSnap.data();
     const itemRef = doc(db, "items", productData.itemId);
     const itemSnap = await getDoc(itemRef);
-
-    if (!itemSnap.exists()) {
-      console.error("Item bilgisi bulunamadı.");
-      return false;
-    }
+    if (!itemSnap.exists()) return false;
 
     const itemData = itemSnap.data();
 
@@ -84,12 +76,13 @@ export const useInventory = () => {
       ...itemData,
     });
 
+    await fetchInventory();
     return true;
   };
 
   return {
     inventory,
-    loadInventory,
+    fetchInventory,
     addItemToInventory,
   };
 };
