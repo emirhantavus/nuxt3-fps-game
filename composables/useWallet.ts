@@ -13,10 +13,8 @@ export const useWallet = () => {
 
     const walletRef = doc(db, "wallets", currentUser.value.uid);
     const snap = await getDoc(walletRef);
-
     if (snap.exists()) {
-      const data = snap.data();
-      balance.value = data.balance ?? 0;
+      balance.value = snap.data().balance;
     }
   };
 
@@ -28,7 +26,7 @@ export const useWallet = () => {
       balance: increment(amount),
     });
 
-    balance.value = (balance.value ?? 0) + amount;
+    balance.value = (balance.value || 0) + amount;
   };
 
   const deduct = async (amount: number) => {
@@ -40,14 +38,13 @@ export const useWallet = () => {
 
     if (currentBalance >= amount) {
       await updateDoc(walletRef, { balance: increment(-amount) });
-      balance.value = (balance.value ?? 0) - amount;
+      balance.value = currentBalance - amount;
       return true;
     }
 
     return false;
   };
 
-  // 🔁 Oturum yüklendikten sonra otomatik bakiye yükle
   watch([authLoaded, currentUser], ([loaded, user]) => {
     if (loaded && user) {
       fetchBalance();
@@ -56,7 +53,6 @@ export const useWallet = () => {
 
   return {
     balance,
-    fetchBalance,
     deposit,
     deduct,
   };

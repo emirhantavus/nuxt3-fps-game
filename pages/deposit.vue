@@ -21,7 +21,8 @@
 
       <button
         @click="handleDeposit"
-        class="bg-valorantRed text-white px-4 py-2 rounded font-bold hover:opacity-80 w-full"
+        :disabled="!authLoaded || !currentUser || amount <= 0"
+        class="bg-valorantRed text-white px-4 py-2 rounded font-bold hover:opacity-80 w-full disabled:opacity-50"
       >
         Yükle
       </button>
@@ -36,11 +37,14 @@ import { ref } from "vue";
 import { useWallet } from "@/composables/useWallet";
 import Navbar from "@/components/navbar.vue";
 import { useAuthRedirect } from "@/composables/useAuthRedirect";
+import { useAuth } from "@/composables/auth";
+
 useAuthRedirect();
 
 const amount = ref(0);
 const message = ref("");
 const { deposit, balance } = useWallet();
+const { currentUser, authLoaded } = useAuth();
 
 const handleDeposit = async () => {
   if (amount.value <= 0) return;
