@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useWallet } from "@/composables/useWallet";
 import Navbar from "@/components/navbar.vue";
 import { useAuthRedirect } from "@/composables/useAuthRedirect";
@@ -43,8 +43,12 @@ useAuthRedirect();
 
 const amount = ref(0);
 const message = ref("");
-const { deposit, balance } = useWallet();
+const { deposit, balance, fetchBalance } = useWallet();
 const { currentUser, authLoaded } = useAuth();
+
+onMounted(() => {
+  fetchBalance(); 
+});
 
 const handleDeposit = async () => {
   if (amount.value <= 0) return;
@@ -54,3 +58,4 @@ const handleDeposit = async () => {
   amount.value = 0;
 };
 </script>
+

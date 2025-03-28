@@ -15,6 +15,8 @@ export const useWallet = () => {
     const snap = await getDoc(walletRef);
     if (snap.exists()) {
       balance.value = snap.data().balance;
+    } else {
+      console.warn("💸 Wallet dokümanı bulunamadı.");
     }
   };
 
@@ -55,5 +57,6 @@ export const useWallet = () => {
     balance,
     deposit,
     deduct,
+    fetchBalance,
   };
 };
