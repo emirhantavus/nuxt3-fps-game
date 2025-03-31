@@ -16,5 +16,22 @@
           <slot></slot>
         </main>
       </div>
-    </template>
-    
+</template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+
+onMounted(() => {
+  const auth = getAuth()
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const tokenResult = await user.getIdTokenResult()
+      console.log(" Kullanıcının rolü:", tokenResult.claims.role)
+    } else {
+      console.log("Kullanıcı giriş yapmadı")
+    }
+  })
+})
+</script>
