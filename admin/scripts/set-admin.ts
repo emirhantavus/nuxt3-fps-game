@@ -1,11 +1,11 @@
 import admin from 'firebase-admin';
-import serviceAccount from '../admin.json';
+import serviceAccount from '../admin.json.json';
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount)
 });
 
-const uid = 'I190eaCzXGY1VuBuf893owdNiY43';
+const uid = 'Qpi2zlB4DZUvPP0mgdBKfqUBxDI2';
 
 admin.auth().setCustomUserClaims(uid, { role: 'admin' })
   .then(() => {

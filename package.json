@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "chart.js": "^4.4.8",
     "firebase": "^11.4.0",
     "firebase-admin": "^13.2.0",
     "nuxt": "^3.16.0",

@@ -40,10 +40,10 @@ definePageMeta({
   middleware: "admin",
 });
 
-import { useRouter } from 'vue-router'
+const router = useRouter();  // ✅ Nuxt 3 doğru kullanımı
 import { useAdminUsers } from "@/composables/useAdminUsers";
+
 const { users, loading } = useAdminUsers();
-const router = useRouter()
 
 const goToUserDetail = (userId: string) => {
   router.push(`/admin/users/${userId}`)
