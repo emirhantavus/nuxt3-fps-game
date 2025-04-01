@@ -1,75 +1,82 @@
-# Nuxt Minimal Starter
+# FPS Oyun Web Arayüzü
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Bu proje, Unity ile geliştirilen FPS oyunu için hazırlanmış modern ve dinamik bir web arayüzüdür. Nuxt 3 + TypeScript + Firebase kullanılarak oluşturulmuştur.
 
-## Setup
+---
 
-Make sure to install dependencies:
+## Genel Sayfalar (Kullanıcı)
 
-```bash
-# npm
-npm install
+| Sayfa                             | Açıklama                                                  |
+|----------------------------------|------------------------------------------------------------|
+| `/`                              | Anasayfa – Video, tanıtım, son haberler, harita özetleri |
+| `/login`                         | Giriş yapma ekranı                                       |
+| `/register`                      | Kayıt olma ekranı                                        |
+| `/profile`                       | Profil sayfası (avatar, istatistik, bilgiler)            |
+| `/inventory`                     | Kullanıcının sahip olduğu ürünlerin listesi              |
+| `/deposit`                       | Bakiye yükleme ekranı                                    |
+| `/cart`                          | Sepet – Ürün satın alma işlemleri                        |
+| `/shop`                          | Mağaza – Ürünlerin listelendiği yer                      |
+| `/news`                          | Haberler listesi                                         |
+| `/news/[id]`                     | Tekil haber detay sayfası                                |
+| `/maps`                          | Haritaların listelendiği tanıtım sayfası                 |
 
-# pnpm
-pnpm install
+---
 
-# yarn
-yarn install
+## Giriş Gerektiren Sayfalar
 
-# bun
-bun install
-```
+Bu sayfalar sadece **giriş yapmış kullanıcılar** tarafından görüntülenebilir:
 
-## Development Server
+- `/profile`
+- `/inventory`
+- `/deposit`
+- `/cart`
+- `/shop`
 
-Start the development server on `http://localhost:3000`:
+---
 
-```bash
-# npm
-npm run dev
+## Admin Panel Sayfaları
 
-# pnpm
-pnpm dev
+Tüm admin sayfalarına erişmek için kullanıcının `role: admin` yetkisine sahip olması gerekir.
 
-# yarn
-yarn dev
+| Sayfa                                 | Açıklama                                      |
+|--------------------------------------|-----------------------------------------------|
+| `/admin/dashboard`                   | Admin panel istatistik ekranı                 |
+| `/admin/users`                       | Kullanıcı listesi                             |
+| `/admin/products`                    | Ürün yönetimi (product koleksiyonu)           |
+| `/admin/items`                       | Item yönetimi (item koleksiyonu)              |
+| `/admin/avatars`                     | Avatar yönetimi (kullanılabilir avatarlar)    |
+| `/admin/wallets`                     | Kullanıcı bakiyeleri                          |
+| `/admin/news`                        | Haberleri listele, düzenle, sil               |
+| `/admin/news/new`                    | Yeni haber ekleme sayfası                     |
+| `/admin/maps`                        | Harita yönetimi (listele/düzenle/sil)         |
+| `/admin/maps/new`                    | Yeni harita ekleme ekranı                     |
+| `/admin/homepage`                    | Ana sayfa içerik düzenleme (hero vs.)         |
+| `/admin/settings/footer`            | Footer linkleri ve sponsorları yönetme        |
+| `/admin/settings/navbar`            | Navbar linkleri düzenleme ve sıralama ekranı  |
 
-# bun
-bun run dev
-```
+---
 
-## Production
+## Firestore Yapısı (Özet)
 
-Build the application for production:
+| Koleksiyon        | Açıklama                                       |
+|-------------------|------------------------------------------------|
+| `users`           | Kullanıcı bilgileri (uid, email, role, avatar) |
+| `wallets/{uid}`   | Kullanıcı bakiyesi                             |
+| `inventory/{uid}` | Kullanıcıya ait ürünler                        |
+| `products`        | Satın alınabilir ürünler                       |
+| `items`           | Ürünlerin detayları                            |
+| `news`            | Haber verileri                                 |
+| `maps`            | Harita verileri                                |
+| `avatars`         | Avatar seçenekleri                             |
+| `homepage`        | Anasayfa içerikleri (`main` belgesi)           |
+| `navbar`          | Navbar menü öğeleri (rastgele ID ile)          |
 
-```bash
-# npm
-npm run build
+---
 
-# pnpm
-pnpm build
+## Geliştiriciler İçin Notlar
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Admin layout: `layouts/admin.vue`
+- Tüm admin sayfaları `admin` middleware ile korunmalı.
+- `authOnly` özelliği navbar'da SSR sırasında `undefined` gelebileceği için dikkatli kontrol edilmeli.
+- Navbar sıralaması `order` alanına göre yapılır.
+- Firestore’dan gelen tüm veriler reactive `ref` içine alınmalı.
