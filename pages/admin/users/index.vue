@@ -35,10 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import adminMiddleware from '~/middleware/admin.global'
 definePageMeta({
-  middleware: adminMiddleware,
-});
+  layout: 'admin',
+  middleware: 'admin'
+})
 
 const router = useRouter();  // ✅ Nuxt 3 doğru kullanımı
 import { useAdminUsers } from "@/composables/useAdminUsers";

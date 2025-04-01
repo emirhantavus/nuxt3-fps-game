@@ -26,9 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import adminMiddleware from '~/middleware/admin.global'
 definePageMeta({
-  middleware: adminMiddleware,
+  layout: 'admin',
+  middleware: 'admin'
 })
 
 import { ref, onMounted } from 'vue'

@@ -88,10 +88,10 @@
 </template>
 
 <script setup lang="ts">
-import adminMiddleware from '~/middleware/admin.global'
 definePageMeta({
-  middleware: adminMiddleware,
-});
+  layout: 'admin',
+  middleware: 'admin'
+})
 
 import { ref, computed, onMounted } from 'vue';
 import { collection, getDocs, addDoc, doc, getDoc } from 'firebase/firestore';
