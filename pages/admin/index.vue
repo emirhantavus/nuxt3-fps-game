@@ -1,15 +1,13 @@
 <template>
-      <div class="min-h-screen bg-valorantDark text-white flex items-center justify-center">
-        <h1 class="text-4xl font-bold text-valorantRed">Admin Panel</h1>
-      </div>
+  <div class="p-8">
+    <h1 class="text-3xl font-bold text-white mb-6">Admin Paneline Hoş Geldin 👑</h1>
+    <p class="text-gray-400">Soldaki menüden bir bölüm seç.</p>
+  </div>
 </template>
-    
-<script setup lang="ts">
-definePageMeta({
-  layout: "admin",
-  middleware: "admin",
-});
 
-await navigateTo("/admin/dashboard");
+<script setup lang="ts">
+import adminMiddleware from '~/middleware/admin.global'
+definePageMeta({
+  middleware: adminMiddleware,
+})
 </script>
-    
