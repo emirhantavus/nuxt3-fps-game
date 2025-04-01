@@ -30,6 +30,7 @@
       <p v-if="message" class="text-green-400 mt-4">{{ message }}</p>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup lang="ts">

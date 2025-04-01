@@ -18,6 +18,7 @@
       <div v-else class="text-gray-400">Henüz envanterinizde ürün yok.</div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup lang="ts">

@@ -9,6 +9,11 @@
         <NuxtLink to="/admin/items" class="block px-3 py-2 rounded hover:bg-gray-700">Itemler</NuxtLink>
         <NuxtLink to="/admin/avatars" class="block px-3 py-2 rounded hover:bg-gray-700">Avatarlar</NuxtLink>
         <NuxtLink to="/admin/wallets" class="block px-3 py-2 rounded hover:bg-gray-700">Bakiyeler</NuxtLink>
+        <NuxtLink to="/admin/news" class="block px-3 py-2 rounded hover:bg-gray-700">Haberler</NuxtLink>
+        <NuxtLink to="/admin/maps" class="block px-3 py-2 rounded hover:bg-gray-700">Haritalar</NuxtLink>
+        <NuxtLink to="/admin/homepage" class="block px-3 py-2 rounded hover:bg-gray-700">Ana Sayfa İçeriği</NuxtLink>
+        <NuxtLink to="/admin/settings/navbar" class="block px-3 py-2 rounded hover:bg-gray-700">Navbar Ayarları</NuxtLink>
+        <NuxtLink to="/admin/settings/footer" class="block px-3 py-2 rounded hover:bg-gray-700">Footer Ayarları</NuxtLink>
         <NuxtLink to="/" class="block px-3 py-2 rounded hover:bg-gray-700">Ana Sayfa</NuxtLink>
       </nav>
     </aside>

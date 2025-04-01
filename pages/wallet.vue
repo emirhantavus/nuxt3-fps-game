@@ -10,6 +10,7 @@
           500 ₺ Yükle
         </button>
       </div>
+      <Footer />
     </template>
     
     <script setup lang="ts">

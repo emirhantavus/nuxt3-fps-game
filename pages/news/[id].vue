@@ -11,6 +11,7 @@
       <p class="news-content">{{ news.content }}</p>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup lang="ts">
