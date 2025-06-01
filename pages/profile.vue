@@ -116,7 +116,7 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 useAuthRedirect();
 
@@ -153,6 +153,10 @@ const updateBio = async () => {
   const docRef = doc(db, "users", currentUser.value.uid);
   await updateDoc(docRef, { bio: bio.value });
   bioMessage.value = "Hakkımda başarıyla güncellendi!";
+  await fetchBio();
+  setTimeout(() => {
+    bioMessage.value = "";
+  }, 2000);
 };
 
 const confirmAvatar = async () => {
@@ -184,7 +188,16 @@ const fetchRecentInventory = async () => {
 
 onMounted(() => {
   fetchAvatars();
-  fetchBio();
-  fetchRecentInventory();
 });
+
+watch(
+  () => [authLoaded.value, currentUser.value],
+  ([isLoaded, user]) => {
+    if (isLoaded && user) {
+      fetchBio();
+      fetchRecentInventory();
+    }
+  },
+  { immediate: true }
+);
 </script>

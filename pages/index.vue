@@ -30,7 +30,7 @@
           {{ homepage.heroDescription }}
         </p>
 
-        <div class="mt-8 flex space-x-4">
+        <div class="mt-8 flex space-x-4" v-if="authLoaded && !currentUser">
           <NuxtLink :to="homepage.button1Link">
             <button class="bg-valorantRed px-6 py-3 rounded-lg text-white font-bold text-xl hover:opacity-80 transition-all">
               {{ homepage.button1Text }}
@@ -104,10 +104,13 @@ import { doc, getDoc, collection, getDocs, orderBy, query } from 'firebase/fires
 import { db } from '@/composables/firebase'
 import Navbar from '@/components/navbar.vue'
 import Footer from '@/components/footer.vue'
+import { useAuth } from '@/composables/auth'
 
 const homepage = ref<any>({})
 const haberler = ref<any[]>([])
 const maps = ref<any[]>([])
+
+const { currentUser, authLoaded } = useAuth()
 
 onMounted(async () => {
   const homepageSnap = await getDoc(doc(db, 'homepage', 'main'))
