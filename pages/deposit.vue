@@ -1,37 +1,39 @@
 <template>
-  <div class="min-h-screen bg-valorantDark text-white p-10">
+  <div class="min-h-screen bg-valorantDark text-white pb-20 flex flex-col">
     <Navbar />
+    <div class="flex-1 flex items-center justify-center px-4">
+      <div class="w-full max-w-md bg-gray-800 p-6 rounded-lg shadow-lg mt-20">
+        <h1 class="text-2xl font-bold mb-4">Bakiye Yükle</h1>
 
-    <div class="max-w-md mx-auto mt-20 bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h1 class="text-2xl font-bold mb-4">Bakiye Yükle</h1>
+        <!-- 🟢 Mevcut Bakiye -->
+        <p class="text-lg mb-4">
+          Mevcut Bakiye:
+          <span v-if="balance !== null" class="text-green-400 font-bold">{{ balance }} ₺</span>
+          <span v-else class="text-yellow-400 font-bold">Yükleniyor...</span>
+        </p>
 
-      <!-- 🟢 Mevcut Bakiye -->
-      <p class="text-lg mb-4">
-        Mevcut Bakiye:
-        <span v-if="balance !== null" class="text-green-400 font-bold">{{ balance }} ₺</span>
-        <span v-else class="text-yellow-400 font-bold">Yükleniyor...</span>
-      </p>
+        <input
+          v-model.number="amount"
+          type="number"
+          placeholder="Yüklenecek miktar"
+          class="w-full px-4 py-2 rounded text-black mb-4"
+        />
 
-      <input
-        v-model.number="amount"
-        type="number"
-        placeholder="Yüklenecek miktar"
-        class="w-full px-4 py-2 rounded text-black mb-4"
-      />
+        <button
+          @click="handleDeposit"
+          :disabled="!authLoaded || !currentUser || amount <= 0"
+          class="bg-valorantRed text-white px-4 py-2 rounded font-bold hover:opacity-80 w-full disabled:opacity-50"
+        >
+          Yükle
+        </button>
 
-      <button
-        @click="handleDeposit"
-        :disabled="!authLoaded || !currentUser || amount <= 0"
-        class="bg-valorantRed text-white px-4 py-2 rounded font-bold hover:opacity-80 w-full disabled:opacity-50"
-      >
-        Yükle
-      </button>
-
-      <p v-if="message" class="text-green-400 mt-4">{{ message }}</p>
+        <p v-if="message" class="text-green-400 mt-4">{{ message }}</p>
+      </div>
     </div>
   </div>
   <Footer />
 </template>
+
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";

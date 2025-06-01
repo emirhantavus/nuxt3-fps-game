@@ -1,18 +1,18 @@
 <template>
-  <div class="relative w-full min-h-screen bg-valorantDark text-white">
+  <div class="relative w-full min-h-screen bg-valorantDark text-white pb-20 overflow-x-hidden">
     <Navbar class="fixed top-0 left-0 w-full z-50" />
-    <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center opacity-10 blur-sm" style="background-image: url('/foto1.png')"></div>
+    <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center opacity-10 blur-sm pointer-events-none select-none" style="background-image: url('/foto1.png')"></div>
 
-    <div class="relative z-10 container mx-auto pt-28 px-6">
-      <div v-if="authLoaded && currentUser" class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div class="relative z-10 container mx-auto pt-28 px-4">
+      <div v-if="authLoaded && currentUser" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Sol Panel -->
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center flex flex-col items-center">
           <img
             :src="currentUser.photoURL || '/avatar.png'"
-            class="w-28 h-28 object-cover rounded-full border-4 border-valorantRed mx-auto mb-4"
+            class="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-full border-4 border-valorantRed mx-auto mb-4"
           />
-          <h2 class="text-xl font-bold">{{ currentUser.email }}</h2>
-          <p class="text-sm text-gray-400 mb-2">UID: {{ currentUser.uid }}</p>
+          <h2 class="text-base sm:text-xl font-bold break-all">{{ currentUser.email }}</h2>
+          <p class="text-xs sm:text-sm text-gray-400 mb-2 break-all">UID: {{ currentUser.uid }}</p>
 
           <button @click="showAvatarModal = true" class="mt-4 bg-valorantRed px-4 py-2 rounded w-full font-bold hover:opacity-80">
             Avatarı Değiştir
@@ -38,16 +38,16 @@
           <!-- İstatistik Kartları -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="bg-gray-800 p-4 rounded shadow text-center">
-              <h4 class="text-lg font-bold text-valorantRed">Oynanan Maç</h4>
-              <p class="text-2xl font-bold">120</p>
+              <h4 class="text-base sm:text-lg font-bold text-valorantRed">Oynanan Maç</h4>
+              <p class="text-xl sm:text-2xl font-bold">120</p>
             </div>
             <div class="bg-gray-800 p-4 rounded shadow text-center">
-              <h4 class="text-lg font-bold text-valorantRed">Galibiyet</h4>
-              <p class="text-2xl font-bold">82</p>
+              <h4 class="text-base sm:text-lg font-bold text-valorantRed">Galibiyet</h4>
+              <p class="text-xl sm:text-2xl font-bold">82</p>
             </div>
             <div class="bg-gray-800 p-4 rounded shadow text-center">
-              <h4 class="text-lg font-bold text-valorantRed">En Çok Silah</h4>
-              <p class="text-xl">AK-47</p>
+              <h4 class="text-base sm:text-lg font-bold text-valorantRed">En Çok Silah</h4>
+              <p class="text-base sm:text-xl">AK-47</p>
             </div>
           </div>
 
@@ -58,10 +58,10 @@
               <div
                 v-for="item in latestItems"
                 :key="item.id"
-                class="bg-gray-900 p-3 rounded w-40 shrink-0"
+                class="bg-gray-900 p-3 rounded w-32 sm:w-40 shrink-0"
               >
-                <img :src="item.image" class="w-full h-20 object-cover rounded mb-2" />
-                <p class="text-sm font-bold">{{ item.name }}</p>
+                <img :src="item.image" class="w-full h-16 sm:h-20 object-cover rounded mb-2" />
+                <p class="text-xs sm:text-sm font-bold">{{ item.name }}</p>
               </div>
             </div>
           </div>
@@ -78,14 +78,14 @@
 
     <!-- Avatar Modal -->
     <div v-if="showAvatarModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-      <div class="bg-gray-900 p-6 rounded-lg max-w-md w-full">
-        <h2 class="text-xl font-bold text-valorantRed mb-4">Avatar Seç</h2>
-        <div class="grid grid-cols-4 gap-3 max-h-[250px] overflow-y-auto">
+      <div class="bg-gray-900 p-6 rounded-lg max-w-xs sm:max-w-md w-full">
+        <h2 class="text-lg sm:text-xl font-bold text-valorantRed mb-4">Avatar Seç</h2>
+        <div class="grid grid-cols-4 gap-2 sm:gap-3 max-h-[250px] overflow-y-auto">
           <img
             v-for="(avatar, i) in avatars"
             :key="i"
             :src="avatar.url"
-            class="w-16 h-16 object-cover rounded-full border-4 cursor-pointer"
+            class="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-full border-4 cursor-pointer"
             :class="selectedAvatar === avatar.url ? 'border-valorantRed' : 'border-transparent'"
             @click="selectedAvatar = avatar.url"
           />
@@ -102,6 +102,7 @@
   </div>
   <Footer />
 </template>
+
 
 <script setup lang="ts">
 import Navbar from "@/components/navbar.vue";
